@@ -82,6 +82,7 @@ public class BatchConfig {
 	public ItemWriter<Product> writer() {
 
 		JdbcBatchItemWriter<Product> writer = new JdbcBatchItemWriter<>();
+		writer.setDataSource(dataSource());
 		writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<Product>());
 		writer.setSql("INSERT INTO PRODUCT(ID,NAME,DESCRIPTION,PRICE) VALUES(:id,:name,:description,:price)");
 		return writer;
