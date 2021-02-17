@@ -1,5 +1,7 @@
 package com.opensource.batchcsvtodb;
 
+import javax.sql.DataSource;
+
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
@@ -12,6 +14,7 @@ import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import com.opensource.batchcsvtodb.model.Product;
 
@@ -58,4 +61,13 @@ public class BatchConfig {
 		return writer;
 	}
 
+	@Bean
+	public DataSource dataSource() {
+		DriverManagerDataSource ds = new DriverManagerDataSource();
+		ds.setDriverClassName("com.mysql.jdbc.Driver");
+		ds.setUrl("jdbc:mysql://localhost:3306/mydb");
+		ds.setUsername("root");
+		ds.setPassword("password");
+		return ds;
+	}
 }
