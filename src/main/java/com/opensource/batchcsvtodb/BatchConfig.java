@@ -1,5 +1,6 @@
 package com.opensource.batchcsvtodb;
 
+import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
@@ -20,7 +21,7 @@ public class BatchConfig {
 		reader.setResource(new ClassPathResource("products.csv"));
 
 		DefaultLineMapper<Product> lineMapper = new DefaultLineMapper<>();
-		
+
 		DelimitedLineTokenizer lineTokenizer = new DelimitedLineTokenizer();
 		lineTokenizer.setNames("id", "name", "description", "price");// bydefault it will use comma as delimiter
 
@@ -29,9 +30,18 @@ public class BatchConfig {
 
 		lineMapper.setLineTokenizer(lineTokenizer);
 		lineMapper.setFieldSetMapper(fieldSetMapper);
-		
+
 		reader.setLineMapper(lineMapper);
 
 		return reader;
+	}
+
+	// itemProcessor is functional interface
+	public ItemProcessor<Product, Product> processor() {
+
+		return p -> {
+			p.setPrice(p.getPrice() - (10 * p.getPrice()) / 100);
+			return p;
+		};
 	}
 }
